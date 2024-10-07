@@ -1,0 +1,1 @@
+# next-strapi-food-app
