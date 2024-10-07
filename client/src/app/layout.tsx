@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+import { SearchBar } from "@/components/custom/search-bar";
+import { Pagination } from "@/components/custom/pagination";
+
+import { Header } from "@/components/custom/header";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -28,7 +32,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="container mx-auto p-4 max-w-6xl">
+          <Header />
+          <div className="relative mb-6 ">
+            <SearchBar />
+          </div>
+          <main>{children}</main>
+          <div className="flex justify-center mt-6">
+            <Pagination pageCount={10} />
+          </div>
+        </div>
       </body>
     </html>
   );

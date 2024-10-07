@@ -1,6 +1,6 @@
 import { RecipeList } from "@/components/custom/recipe-list";
 import { recipes } from "@/mock";
 
-export default function RecipeApp() {
+export default function SavedRecipes() {
   return <RecipeList recipes={recipes} />
 }
