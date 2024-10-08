@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_elements_ingredients",
+  "info": {
+    "displayName": "Ingredient"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "text"
+    }
+  }
+}

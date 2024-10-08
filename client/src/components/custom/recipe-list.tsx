@@ -1,5 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { StrapiImage } from "@/components/custom/strapi-image";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Modal } from "@/components/custom/modal";
+import { RecipeDetails } from "@/components/custom/recipe-details";
+
 import {
   Card,
   CardContent,
@@ -7,54 +11,66 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Heart } from "lucide-react";
+import { Pagination } from "./pagination";
+
+interface ImageProps {
+  url: string;
+  alternativeText: string;
+  name: string;
+}
 
 interface RecipeProps {
   id: number;
-  title: string;
-  author: string;
-  authorAvatar: string;
-  category: string;
-  likes: number;
-  image: string;
+  documentId: string;
+  label: string;
+  image: ImageProps;
 }
 
-export function RecipeList({ recipes }: { readonly recipes: RecipeProps[] }) {
+export function RecipeList({
+  recipes,
+  pageCount,
+}: {
+  readonly recipes: RecipeProps[];
+  readonly pageCount: number;
+}) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    {recipes.map((recipe) => (
-      <Card key={recipe.id} className="overflow-hidden">
-        <img
-          src={recipe.image}
-          alt={recipe.title}
-          className="w-full h-48 object-cover"
-        />
-        <CardHeader>
-          <CardTitle>{recipe.title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Badge variant="secondary">{recipe.category}</Badge>
-        </CardContent>
-        <CardFooter className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <Avatar>
-              <AvatarImage src={recipe.authorAvatar} />
-              <AvatarFallback>
-                {recipe.author
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-sm text-muted-foreground">
-              {recipe.author}
-            </span>
-          </div>
-          <div className="flex items-center">
-            <span className="text-sm font-medium">{recipe.likes} likes</span>
-          </div>
-        </CardFooter>
-      </Card>
-    ))}
-  </div>
-  )
+    <>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {recipes.map((recipe) => (
+          <Card key={recipe.id} className="overflow-hidden">
+            <StrapiImage
+              src={recipe.image.url}
+              alt={recipe.image.alternativeText || recipe.image.name}
+              width={400}
+              height={800}
+              className="w-full h-48 object-cover"
+            />
+            <CardHeader>
+              <CardTitle>{recipe.label}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Badge variant="secondary">{"category"}</Badge>
+            </CardContent>
+            <CardFooter className="flex justify-between items-center">
+              <div className="flex items-center space-x-1">
+                <Heart className="w-4 h-4 text-red-500" />
+                <span className="text-sm font-medium">{10} likes</span>
+              </div>
+              <Modal
+                isLoggedIn={true}
+                heading={recipe.label}
+                button={<Button>See Recipe</Button>}
+              >
+                <RecipeDetails recipe={recipe} />
+              </Modal>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+      <div className="flex justify-center mt-6">
+        <Pagination pageCount={pageCount} />
+      </div>
+    </>
+  );
 }

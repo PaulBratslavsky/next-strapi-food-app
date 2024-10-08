@@ -38,9 +38,7 @@ export default function RootLayout({
             <SearchBar />
           </div>
           <main>{children}</main>
-          <div className="flex justify-center mt-6">
-            <Pagination pageCount={10} />
-          </div>
+         
         </div>
       </body>
     </html>
