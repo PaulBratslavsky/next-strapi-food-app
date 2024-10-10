@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/custom/modal";
 import { RecipeDetails } from "@/components/custom/recipe-details";
-
+import { SearchBar } from "@/components/custom/search-bar";
 import {
   Card,
   CardContent,
@@ -36,6 +36,10 @@ export function RecipeList({
 }) {
   return (
     <>
+      <div className="mb-6">
+        <SearchBar />
+      </div>
+
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {recipes.map((recipe) => (
           <Card key={recipe.id} className="overflow-hidden">

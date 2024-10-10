@@ -1,6 +1,6 @@
 import { RecipeList } from "@/components/custom/recipe-list";
-import { recipes } from "@/mock";
+import { recipes } from "@/mock"; 
 
-export default function MyRecipes() {
-  return <RecipeList recipes={recipes} />
+export default async function MyRecipes() {
+  return <RecipeList recipes={recipes as any} pageCount={1} />
 }

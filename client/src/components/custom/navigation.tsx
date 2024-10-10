@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Home, Book, Bookmark, LogIn, LogOut } from "lucide-react";
+import { Menu, Home, Book, Bookmark, LogIn } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -15,9 +15,13 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface NavigationProps {
   isLoggedIn: boolean;
+  logoutButton: React.ReactNode;
 }
 
-export function Navigation({ isLoggedIn }: Readonly<NavigationProps>) {
+export function Navigation({
+  isLoggedIn,
+  logoutButton,
+}: Readonly<NavigationProps>) {
   const [open, setOpen] = useState(false);
 
   const handleLinkClick = () => {
@@ -86,29 +90,21 @@ export function Navigation({ isLoggedIn }: Readonly<NavigationProps>) {
                   Saved Recipes
                 </Link>
               </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  console.log("Logout clicked");
-                  handleLinkClick();
-                }}
-              >
-                <LogOut className="mr-2 h-5 w-5" />
-                Logout
-              </Button>
+              <button onClick={handleLinkClick} className="logout-button">
+                <span>{logoutButton}</span>
+              </button>
             </>
           ) : (
             <Button
               variant="ghost"
               className="w-full justify-start"
-              onClick={() => {
-                console.log("Login clicked");
-                handleLinkClick();
-              }}
+              asChild
+              onClick={handleLinkClick}
             >
-              <LogIn className="mr-2 h-5 w-5" />
-              Login
+              <Link href="/signin">
+                <LogIn className="mr-2 h-5 w-5" />
+                Login
+              </Link>
             </Button>
           )}
         </div>

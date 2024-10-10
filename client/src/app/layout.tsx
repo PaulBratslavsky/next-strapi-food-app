@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-import { SearchBar } from "@/components/custom/search-bar";
-import { Pagination } from "@/components/custom/pagination";
-
 import { Header } from "@/components/custom/header";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,7 +32,6 @@ export default function RootLayout({
         <div className="container mx-auto p-4 max-w-6xl">
           <Header />
           <div className="relative mb-6 ">
-            <SearchBar />
           </div>
           <main>{children}</main>
          
