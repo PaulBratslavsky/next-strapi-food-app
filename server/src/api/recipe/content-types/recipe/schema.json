@@ -26,15 +26,19 @@
     "serving": {
       "type": "integer"
     },
-    "likes": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user"
-    },
     "ingredients": {
       "type": "component",
       "repeatable": true,
       "component": "elements.ingredient"
+    },
+    "authorId": {
+      "type": "string",
+      "unique": false,
+      "required": false
+    },
+    "likes": {
+      "type": "integer",
+      "default": 0
     }
   }
 }

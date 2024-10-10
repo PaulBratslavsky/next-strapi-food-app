@@ -64,11 +64,6 @@
       "target": "plugin::users-permissions.role",
       "inversedBy": "users",
       "configurable": false
-    },
-    "myRecipes": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::recipe.recipe"
     }
   }
 }

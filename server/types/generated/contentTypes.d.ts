@@ -1,5 +1,33 @@
 import type { Struct, Schema } from '@strapi/strapi';
 
+export interface ApiFavoriteFavorite extends Struct.CollectionTypeSchema {
+  collectionName: 'favorites';
+  info: {
+    singularName: 'favorite';
+    pluralName: 'favorites';
+    displayName: 'Favorite';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    userId: Schema.Attribute.String;
+    recipe: Schema.Attribute.Relation<'oneToOne', 'api::recipe.recipe'>;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::favorite.favorite'
+    >;
+  };
+}
+
 export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
   collectionName: 'recipes';
   info: {
@@ -15,11 +43,9 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
     label: Schema.Attribute.String;
     image: Schema.Attribute.Media<'images'>;
     serving: Schema.Attribute.Integer;
-    likes: Schema.Attribute.Relation<
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
     ingredients: Schema.Attribute.Component<'elements.ingredient', true>;
+    authorId: Schema.Attribute.String;
+    likes: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -501,7 +527,6 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    myRecipes: Schema.Attribute.Relation<'oneToMany', 'api::recipe.recipe'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -882,6 +907,7 @@ export interface AdminTransferTokenPermission
 declare module '@strapi/strapi' {
   export module Public {
     export interface ContentTypeSchemas {
+      'api::favorite.favorite': ApiFavoriteFavorite;
       'api::recipe.recipe': ApiRecipeRecipe;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;

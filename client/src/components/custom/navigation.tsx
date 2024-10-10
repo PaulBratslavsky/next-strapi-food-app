@@ -57,7 +57,6 @@ export function Navigation({
             asChild
             className="w-full justify-start"
             onClick={() => {
-              console.log("Home clicked");
               handleLinkClick();
             }}
           >

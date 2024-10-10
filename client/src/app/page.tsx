@@ -10,7 +10,6 @@ interface SearchParamsProps {
 
 async function loader(page: number, queryString: string) {
   const data = await getRecipes(page, queryString);
-  console.dir(data, { depth: null });
   return { data: data?.data || [], meta: data.meta };
 }
 

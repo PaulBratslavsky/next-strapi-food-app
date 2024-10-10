@@ -11,8 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Heart } from "lucide-react";
 import { Pagination } from "./pagination";
+
+import {LikeButtonWrapper} from "@/components/custom/LikeButtonWrapper";
 
 interface ImageProps {
   url: string;
@@ -24,6 +25,7 @@ interface RecipeProps {
   id: number;
   documentId: string;
   label: string;
+  likes: number;
   image: ImageProps;
 }
 
@@ -57,10 +59,7 @@ export function RecipeList({
               <Badge variant="secondary">{"category"}</Badge>
             </CardContent>
             <CardFooter className="flex justify-between items-center">
-              <div className="flex items-center space-x-1">
-                <Heart className="w-4 h-4 text-red-500" />
-                <span className="text-sm font-medium">{10} likes</span>
-              </div>
+              <LikeButtonWrapper id={recipe.documentId} likes={recipe.likes} />
               <Modal
                 isLoggedIn={true}
                 heading={recipe.label}
