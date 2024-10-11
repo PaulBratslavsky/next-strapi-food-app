@@ -4,7 +4,8 @@
   "info": {
     "singularName": "favorite",
     "pluralName": "favorites",
-    "displayName": "Favorite"
+    "displayName": "Favorite",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -14,10 +15,8 @@
     "userId": {
       "type": "string"
     },
-    "recipe": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::recipe.recipe"
+    "recipeId": {
+      "type": "string"
     }
   }
 }

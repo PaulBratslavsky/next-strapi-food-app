@@ -14,7 +14,6 @@ export default function LikeButton({
   id: string;
   isLiked: boolean;
 }) {
-  console.log("isLiked", isLiked);
 
   const [state, formAction] = useFormState(toggleLike, {
     likes: initialLikes,

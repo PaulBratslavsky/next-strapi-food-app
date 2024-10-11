@@ -12,8 +12,22 @@ interface SearchParamsProps {
 async function loader(page: number, queryString: string) {
   const user = await getUserMeLoader();
   const userId = user?.data?.documentId;  
+
   const favoriteIds = await getUserFavoritesLoader(userId);
+
+  console.log("##########################");
+  console.log(favoriteIds);
+  console.log("##########################");
+
+  if (favoriteIds?.length === 0) return { data: [], meta: { pagination: { pageCount: 0 } } };
+
+
   const data = await getRecipesByDocumentIds(favoriteIds, page, queryString);
+
+  console.log("##########################");
+  console.log(data);
+  console.log("##########################");
+
   return { data: data?.data || [], meta: data.meta };
 }
 

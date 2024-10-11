@@ -2,7 +2,7 @@ export default {
   routes: [
     { 
       method: 'POST',
-      path: '/favorite/:id',
+      path: '/favorite/:recipeId',
       handler: 'favorite.favorite',
       config: {
         policies: [],

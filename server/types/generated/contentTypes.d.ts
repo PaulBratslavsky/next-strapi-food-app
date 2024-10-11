@@ -6,13 +6,14 @@ export interface ApiFavoriteFavorite extends Struct.CollectionTypeSchema {
     singularName: 'favorite';
     pluralName: 'favorites';
     displayName: 'Favorite';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     userId: Schema.Attribute.String;
-    recipe: Schema.Attribute.Relation<'oneToOne', 'api::recipe.recipe'>;
+    recipeId: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
