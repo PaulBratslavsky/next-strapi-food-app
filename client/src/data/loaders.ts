@@ -1,14 +1,15 @@
 import qs from "qs";
 import { fetchAPI } from "@/lib/fetch-api";
 const BASE_URL = process.env.STRAPI_API_URL ?? "http://localhost:1337";
+
 const PAGE_SIZE = 9;
+
 import { redirect } from "next/navigation";
 import { getAuthToken } from "@/lib/services/get-auth-token";
 import { getUserMeLoader } from "@/lib/services/user";
 
-export async function getRecipes(page: number, queryString: string) {
+export async function getRecipesLoader(page: number, queryString: string) {
   const path = "/api/recipes";
-
   const url = new URL(path, BASE_URL);
 
   url.search = qs.stringify({
@@ -29,23 +30,20 @@ export async function getRecipes(page: number, queryString: string) {
     sort: [
       {
         createdAt: "desc",
-      }
-    ],  
-
+      },
+    ],
   });
 
-  return await await fetchAPI(url.href, { method: "GET" });
+  return await fetchAPI(url.href, { method: "GET" });
 }
 
 export async function getUserRecipesLoader(
   userId: string,
   page: number,
-  queryString: string
+  queryString: string,
+  authToken: string
 ) {
-  if (!userId) redirect("/signin");
-  const authToken = await getAuthToken();
   const path = "/api/recipes";
-
   const url = new URL(path, BASE_URL);
 
   url.search = qs.stringify({
@@ -66,6 +64,11 @@ export async function getUserRecipesLoader(
         $containsi: queryString,
       },
     },
+    sort: [
+      {
+        createdAt: "desc",
+      },
+    ],
   });
 
   return await fetchAPI(url.href, { method: "GET", authToken });
@@ -77,10 +80,9 @@ function extractRecipeDocumentIds(
   }[]
 ): string[] {
   return favorites.map((favorite) => {
-    return favorite.recipeId
+    return favorite.recipeId;
   });
 }
-
 
 export async function getUserFavoritesLoader(userId: string) {
   if (!userId) redirect("/signin");
@@ -97,8 +99,12 @@ export async function getUserFavoritesLoader(userId: string) {
         $eq: userId,
       },
     },
+    sort: [
+      {
+        createdAt: "desc",
+      },
+    ],
   });
-
 
   const favorites = await fetchAPI(url.href, { method: "GET", authToken });
   const favoriteRecipeDocumentIds = extractRecipeDocumentIds(favorites?.data);
@@ -106,8 +112,7 @@ export async function getUserFavoritesLoader(userId: string) {
   return favoriteRecipeDocumentIds;
 }
 
-
-export async function getRecipesByDocumentIds(
+export async function getRecipesByDocumentIdsLoader(
   documentIds: string[],
   page: number,
   queryString: string
@@ -148,7 +153,6 @@ export async function getLikedRecipeLoader(id: string) {
   const path = "/api/favorites";
   const url = new URL(path, BASE_URL);
 
-
   url.search = qs.stringify({
     fields: ["documentId"],
     filters: {
@@ -163,11 +167,5 @@ export async function getLikedRecipeLoader(id: string) {
 
   const response = await fetchAPI(url.href, { method: "GET", authToken });
   const isLiked = response.data.length > 0;
-  console.log("##############");
-  console.log(response);
-  console.log(isLiked);
-  console.log(userId);
-  console.log("##############");
-
   return { isLiked };
 }

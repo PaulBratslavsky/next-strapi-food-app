@@ -1,23 +1,23 @@
-import { RecipeList } from "@/components/custom/recipe-list";
-import { getRecipes } from "@/data/loaders";
+// Types
+import { type SearchParamsProps } from "@/types";
 
-interface SearchParamsProps {
-  searchParams?: {
-    page?: string;
-    query?: string;
-  };
-}
+// Data Loaders
+import { getRecipesLoader } from "@/data/loaders";
+
+// UI Components
+import { RecipeList } from "@/components/custom/recipe-list";
 
 async function loader(page: number, queryString: string) {
-  const data = await getRecipes(page, queryString);
+  const data = await getRecipesLoader(page, queryString);
   return { data: data?.data || [], meta: data.meta };
 }
 
-export default async function HomeRoute({ searchParams }: Readonly<SearchParamsProps>) {
-  
+export default async function HomeRoute({
+  searchParams,
+}: Readonly<SearchParamsProps>) {
   const currentPage = Number(searchParams?.page) || 1;
   const query = searchParams?.query ?? "";
 
   const { data, meta } = await loader(currentPage, query);
-  return <RecipeList recipes={data} pageCount={meta.pagination.pageCount} />
+  return <RecipeList recipes={data} pageCount={meta.pagination.pageCount} />;
 }
