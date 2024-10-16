@@ -13,16 +13,28 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
+// Types
+interface User {
+  id: number;
+  documentId: string;
+  email: string;
+  username: string;
+}
+
 interface NavigationProps {
   isLoggedIn: boolean;
   logoutButton: React.ReactNode;
+  user: User;
 }
 
 export function Navigation({
   isLoggedIn,
   logoutButton,
+  user,
 }: Readonly<NavigationProps>) {
   const [open, setOpen] = useState(false);
+
+  console.log(user);
 
   const handleLinkClick = () => {
     setOpen(false);
@@ -47,9 +59,9 @@ export function Navigation({
                   src="/placeholder.svg?height=40&width=40"
                   alt="User"
                 />
-                <AvatarFallback>U</AvatarFallback>
+                <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>
               </Avatar>
-              <span>Welcome, User!</span>
+              <span>Welcome, {user.username}!</span>
             </div>
           ) : null}
           <Button

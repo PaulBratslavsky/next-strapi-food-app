@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_elements_instructions",
+  "info": {
+    "displayName": "Instruction"
+  },
+  "options": {},
+  "attributes": {
+    "step": {
+      "type": "string"
+    }
+  }
+}

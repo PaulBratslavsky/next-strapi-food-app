@@ -1,13 +1,15 @@
 /**
  * favorite service
  */
+import { errors } from "@strapi/utils";
+const { ApplicationError } = errors;
 
 import { factories } from "@strapi/strapi";
 
 export default factories.createCoreService("api::favorite.favorite", {
   async toggleFavorite(userId: string, recipeId: string) {
     const recipe = await strapi.service("api::recipe.recipe").findOne(recipeId);
-    if (!recipe) throw new Error("Recipe not found");
+    if (!recipe) throw new ApplicationError("Recipe not found");
 
     const favorites = await strapi
       .documents("api::favorite.favorite")

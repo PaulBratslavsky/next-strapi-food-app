@@ -39,6 +39,15 @@
     "likes": {
       "type": "integer",
       "default": 0
+    },
+    "imageUrl": {
+      "type": "string"
+    },
+    "instructions": {
+      "displayName": "Instruction",
+      "type": "component",
+      "repeatable": true,
+      "component": "elements.instruction"
     }
   }
 }

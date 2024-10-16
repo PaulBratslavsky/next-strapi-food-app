@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Pagination } from "./pagination";
 
-import {LikeButtonWrapper} from "@/components/custom/LikeButtonWrapper";
+import { LikeButtonWrapper } from "@/components/custom/like-button-wrapper";
 
 interface ImageProps {
   url: string;

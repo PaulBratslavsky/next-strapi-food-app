@@ -18,7 +18,6 @@ export default factories.createCoreController("api::favorite.favorite", {
     return (ctx.body = {
       data: {
         id: recipeId,
-        user: userId,
         isFavorite: !isAlreadyFavorited,
         likes: updatedRecipe.likes,
       },

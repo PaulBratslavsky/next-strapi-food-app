@@ -1,62 +1,119 @@
+"use client";
+import { useState, useRef, useCallback, useEffect } from "react";
+import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Upload } from "lucide-react";
-import { useRef, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { LucideUpload } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ImageInputProps {
-  onChange: (file: File) => void;
-  initialImagePreview?: string;
+  onFileChange: (file: File | null) => void;
+  reset: boolean;
 }
 
-export function ImageInput({
-  onChange,
-  initialImagePreview,
-}: Readonly<ImageInputProps>) {
+export function ImageInput({ onFileChange, reset }: Readonly<ImageInputProps>) {
+  const [preview, setPreview] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(
-    initialImagePreview ?? null
-  );
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleFile = (file: File | null) => {
     if (file) {
-      const newImagePreview = URL.createObjectURL(file);
-      setImagePreview(newImagePreview);
-      onChange(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      onFileChange(file);
+    } else {
+      setPreview(null);
+      onFileChange(null);
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    handleFile(file);
+  };
+
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0] || null;
+    handleFile(file);
+    if (fileInputRef.current) {
+      fileInputRef.current.files = e.dataTransfer.files;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (reset) {
+      setPreview(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  }, [reset]);
+
   return (
-    <div className="flex flex-col gap-4">
-      <div>
-        {imagePreview && (
-          <div className="mb-2 rounded-md overflow-hidden">
-            <img
-              src={imagePreview}
+    <Card>
+      <CardContent
+        className={cn(
+          "p-0 flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-lg cursor-pointer overflow-hidden",
+          isDragging ? "border-primary" : "border-gray-300"
+        )}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onClick={() => fileInputRef.current?.click()}
+      >
+        {preview ? (
+          <div className="relative w-full h-full">
+            <Image
+              src={preview}
               alt="Preview"
-              className="max-w-full h-auto"
+              fill
+              sizes="100%"
+              style={{ objectFit: "cover" }}
+              className="w-full h-full"
             />
           </div>
+        ) : (
+          <div className="text-center">
+            <LucideUpload className="mx-auto h-12 w-12 text-gray-400" />
+            <p className="mt-2 text-sm text-gray-600">
+              Drag and drop an image here, or click to select a file
+            </p>
+          </div>
         )}
-        <Input
-          id="image"
-          name="image"
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="hidden"
-          ref={fileInputRef}
-        />
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => fileInputRef.current?.click()}
-          className="w-full"
-        >
-          <Upload className="mr-2 h-4 w-4" /> Upload Image
-        </Button>
-      </div>
-    </div>
+      </CardContent>
+      <Input
+        id="image"
+        type="file"
+        name="image"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="hidden"
+        ref={fileInputRef}
+      />
+    </Card>
   );
 }

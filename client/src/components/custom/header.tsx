@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Navigation } from "@/components/custom/navigation";
 import { Modal } from "@/components/custom/modal";
 import { AddRecipe } from "@/components/forms/add-recipe";
@@ -5,16 +7,24 @@ import { Button } from "@/components/ui/button";
 import { LogOut, Plus } from "lucide-react";
 import { getUserMeLoader } from "@/lib/services/user";
 import { LogoutButtonWrapper } from "./logout-button-wrapper";
+import { ShowPath } from "@/components/custom/show-path";
+import { CategoryDropdownInput } from "@/components/custom/category-dropdown-input";
 
 export async function Header() {
-  const user = await getUserMeLoader();
+  const userData = await getUserMeLoader();
+  const isLoggedIn = userData.ok;
 
   return (
     <header className="flex justify-between items-center mb-8">
-      <h1 className="text-2xl md:text-3xl font-bold">RecipeShare</h1>
+      <div className="flex items-center space-x-4">
+        <Link href="/" className="text-2xl md:text-3xl font-bold">
+          RecipeShare
+        </Link>
+        <ShowPath />
+      </div>
       <div className="flex items-center space-x-4">
         <Modal
-          isLoggedIn={true}
+          isLoggedIn={isLoggedIn}
           heading="Add New Recipe"
           description="Fill in the details of your new recipe here. Click save when you're done."
           button={
@@ -24,10 +34,11 @@ export async function Header() {
             </Button>
           }
         >
-          <AddRecipe />
+          <AddRecipe categories={<CategoryDropdownInput />} />
         </Modal>
         <Navigation
-          isLoggedIn={user.ok}
+          isLoggedIn={isLoggedIn}
+          user={userData.data}
           logoutButton={
             <LogoutButtonWrapper>
               <Button

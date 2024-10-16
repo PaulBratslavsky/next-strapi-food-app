@@ -169,3 +169,14 @@ export async function getLikedRecipeLoader(id: string) {
   const isLiked = response.data.length > 0;
   return { isLiked };
 }
+
+export async function getCategoriesLoader() {
+  const path = "/api/categories";
+  const url = new URL(path, BASE_URL);
+
+  const response = await fetchAPI(url.href, { method: "GET" });
+  console.log("###########################");
+  console.log(response);
+  console.log("###########################");
+  return response.data;
+}
