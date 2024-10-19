@@ -13,11 +13,14 @@ interface FetchAPIOptions<T = any> {
 class HTTPError extends Error {
   constructor(public status: number, public body: string) {
     super(`HTTP error! status: ${status}`);
-    this.name = 'HTTPError';
+    this.name = "HTTPError";
   }
 }
 
 export async function fetchAPI(url: string, options: FetchAPIOptions) {
+  console.log("############    ###############");
+  console.log(url, "url");
+  console.log("############    ###############");
   const { method, authToken, payload, next } = options;
 
   const headers: HeadersInit = {
@@ -39,6 +42,10 @@ export async function fetchAPI(url: string, options: FetchAPIOptions) {
     const response = await fetch(url, fetchOptions);
 
     if (!response.ok) {
+      console.log("############    ###############");
+      console.log(response.status, "response.status");
+      console.log("############    ###############");
+
       const errorBody = await response.text();
       throw new HTTPError(response.status, errorBody);
     }
@@ -50,7 +57,6 @@ export async function fetchAPI(url: string, options: FetchAPIOptions) {
     } else {
       return await response.text();
     }
-
   } catch (error) {
     console.error(`Error ${method} ${url}:`, error);
     if (error instanceof HTTPError) {

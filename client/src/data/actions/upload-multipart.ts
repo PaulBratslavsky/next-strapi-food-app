@@ -40,55 +40,61 @@ export async function uploadMultipart(formData: FormData) {
     };
   }
 
-  try {
-    const file = validatedFields.data.image;
-    const fileBuffer = await (formData.get("image") as File).arrayBuffer();
+  // TODO: PROMISE CATCH WITH VS TRY CATCH
+  const file = validatedFields.data.image;
+  const fileBuffer = await (formData.get("image") as File).arrayBuffer();
 
-    const uploadedImage = await uploadImageService(file as File, fileBuffer);
+  const uploadedImage = await uploadImageService(file as File, fileBuffer);
 
-    const ingredients = formData.get("ingredients") as string;
-    const instructions = formData.get("instructions") as string;
-
-    const ingredientsObject = parseStringToObject(
-      ingredients,
-      "ingredients",
-      "name"
-    );
-
-    const instructionsObject = parseStringToObject(
-      instructions,
-      "instructions",
-      "step"
-    );
-
-    const payload = {
-      data: {
-        label: formData.get("label"),
-        serving: formData.get("serving"),
-        imageUrl: uploadedImage?.data[0].url,
-        image: uploadedImage?.data[0].id,
-        ...ingredientsObject,
-        ...instructionsObject,
-      },
-    };
-
-    const uploadedContent = await createRecipeService(payload);
-
-    console.log("###########################");
-    console.log(uploadedContent);
-    console.log("###########################");
-
-    revalidatePath("/");
+  if (!uploadedImage.data) {
     return {
-      data: uploadedContent,
       zodErrors: null,
       strapiErrors: null,
-      message: "Recipe Uploaded",
+      message: "Failed to upload image",
     };
-  } catch (error) {
-    console.error(error);
-    throw error;
   }
+
+
+
+  const ingredients = formData.get("ingredients") as string;
+  const instructions = formData.get("instructions") as string;
+
+  const ingredientsObject = parseStringToObject(
+    ingredients,
+    "ingredients",
+    "name"
+  );
+
+  const instructionsObject = parseStringToObject(
+    instructions,
+    "instructions",
+    "step"
+  );
+
+  const payload = {
+    data: {
+      label: formData.get("label"),
+      serving: formData.get("serving"),
+      imageUrl: uploadedImage?.data[0].url,
+      image: uploadedImage?.data[0].id,
+      ...ingredientsObject,
+      ...instructionsObject,
+    },
+  };
+
+  const uploadedContent = await createRecipeService(payload);
+
+  console.log("###########################");
+  console.log(uploadedContent);
+  console.log("###########################");
+
+  revalidatePath("/");
+  return {
+    data: uploadedContent,
+    zodErrors: null,
+    strapiErrors: null,
+    message: "Recipe Uploaded",
+  };
 }
 
 function parseStringToObject(items: string, key: string, field: string) {
