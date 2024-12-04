@@ -9,5 +9,11 @@ export default {
       },
     },
 
+    {
+      method: 'GET',
+      path: '/favorite/user-favorites',
+      handler: 'favorite.getUserFavorites',
+    },
+
   ]
 }

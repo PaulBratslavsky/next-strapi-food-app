@@ -88,17 +88,12 @@ export async function getUserFavoritesLoader(userId: string) {
   if (!userId) redirect("/signin");
 
   const authToken = await getAuthToken();
-  const path = "/api/favorites";
+  const path = "/api/favorite/user-favorites";
 
   const url = new URL(path, BASE_URL);
 
   url.search = qs.stringify({
     fields: ["recipeId", "userId"],
-    filters: {
-      userId: {
-        $eq: userId,
-      },
-    },
     sort: [
       {
         createdAt: "desc",
