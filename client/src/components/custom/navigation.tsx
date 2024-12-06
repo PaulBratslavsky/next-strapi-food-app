@@ -34,8 +34,6 @@ export function Navigation({
 }: Readonly<NavigationProps>) {
   const [open, setOpen] = useState(false);
 
-  console.log(user);
-
   const handleLinkClick = () => {
     setOpen(false);
   };

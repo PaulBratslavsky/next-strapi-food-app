@@ -18,9 +18,6 @@ class HTTPError extends Error {
 }
 
 export async function fetchAPI(url: string, options: FetchAPIOptions) {
-  console.log("############    ###############");
-  console.log(url, "url");
-  console.log("############    ###############");
   const { method, authToken, payload, next } = options;
 
   const headers: HeadersInit = {

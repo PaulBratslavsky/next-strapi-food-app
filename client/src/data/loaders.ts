@@ -102,6 +102,9 @@ export async function getUserFavoritesLoader(userId: string) {
   });
 
   const favorites = await fetchAPI(url.href, { method: "GET", authToken });
+  console.log("###########################");
+  console.log(favorites, "favorites");
+  console.log("###########################");
   const favoriteRecipeDocumentIds = extractRecipeDocumentIds(favorites?.data);
 
   return favoriteRecipeDocumentIds;
@@ -170,8 +173,5 @@ export async function getCategoriesLoader() {
   const url = new URL(path, BASE_URL);
 
   const response = await fetchAPI(url.href, { method: "GET" });
-  console.log("###########################");
-  console.log(response);
-  console.log("###########################");
   return response.data;
 }

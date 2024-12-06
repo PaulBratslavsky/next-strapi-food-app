@@ -22,13 +22,13 @@ async function loader(page: number, queryString: string) {
 
   if (favoriteIds?.length === 0) return { data: [], meta: { pagination: { pageCount: 0 } } };
   const data = await getRecipesByDocumentIdsLoader(favoriteIds, page, queryString);
-
-  return { data: data?.data || [], meta: data.meta };
+  return { ...data };
 }
 
 export default async function SavedRecipes({ searchParams }: Readonly<SearchParamsProps>  ) {
+
   const currentPage = Number(searchParams?.page) || 1;
   const query = searchParams?.query ?? "";
   const { data, meta } = await loader(currentPage, query);
-  return <RecipeList recipes={data} pageCount={meta.pagination.pageCount} />
+  return <RecipeList recipes={data} pageCount={meta?.pagination?.pageCount || 1} />
 }
